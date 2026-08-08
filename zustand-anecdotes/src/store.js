@@ -6,7 +6,7 @@ const storeAnecdotes = create(set => ({
 		upvote: id => set(
 			state => ({
 				anecdotes: (state.anecdotes.map(a => a.id === id
-					? {...a, votes: a.votes + 1}
+					? { ...a, votes: a.votes + 1 }
 					: a
 				)).toSorted((a,b) => a.votes < b.votes)
 			})
@@ -21,11 +21,11 @@ const storeAnecdotes = create(set => ({
 			})
 		)
 	}
-}))
+}));
 
 // yeah, it's lazy but not what we're training here
 const genID = () => {
-	return Math.floor(Math.random()*1000000)
-}
-export const useAnecdotes = () => storeAnecdotes(state => state.anecdotes)
-export const useAnecdoteControls = () => storeAnecdotes(state => state.actions)
+	return Math.floor(Math.random()*1000000);
+};
+export const useAnecdotes = () => storeAnecdotes(state => state.anecdotes);
+export const useAnecdoteControls = () => storeAnecdotes(state => state.actions);

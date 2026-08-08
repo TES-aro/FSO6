@@ -1,18 +1,21 @@
-import {useAnecdoteControls } from '../anecdote_store.js'
+import { useAnecdoteControls } from '../store.js';
 
-const Anecdote = (anecdote) => {
-	const {like} = useAnecdoteControls
+const Anecdote = ({ anecdote }) => {
+	const { upvote } = useAnecdoteControls();
+	console.log(anecdote);
+	console.log(`hi! in signual anecdote ${anecdote.content}`);
 
 	const likeHandler = () => {
-		like(anecdote.id)
-	}
+		upvote(anecdote.id);
+	};
 
 	return (
-		<li key={anecdote.id}>
-			{anecdote.text}
+		<li>
+			{anecdote.content} <br/>
+			has {anecdote.votes} votes
 			<button onClick={likeHandler}> like </button>
 		</li>
-	)
-}
+	);
+};
 
-export default Anecdote
+export default Anecdote;
