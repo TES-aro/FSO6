@@ -2,8 +2,8 @@ import { useAnecdoteControls } from '../store.js';
 
 const Anecdote = ({ anecdote }) => {
 	const { upvote } = useAnecdoteControls();
-	console.log(anecdote);
-	console.log(`hi! in signual anecdote ${anecdote.content}`);
+	//console.log(anecdote);
+	//console.log(`hi! in signual anecdote ${anecdote.content}`);
 
 	const likeHandler = () => {
 		upvote(anecdote.id);

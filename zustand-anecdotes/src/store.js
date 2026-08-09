@@ -1,8 +1,12 @@
 import { create } from 'zustand';
 
 const storeAnecdotes = create(set => ({
+	filter: "",
 	anecdotes: [],
 	actions: {
+		updateFilter: filterStr => set(
+			state => ({filter: filterStr})
+		),
 		upvote: id => set(
 			state => ({
 				anecdotes: (state.anecdotes.map(a => a.id === id
@@ -28,4 +32,5 @@ const genID = () => {
 	return Math.floor(Math.random()*1000000);
 };
 export const useAnecdotes = () => storeAnecdotes(state => state.anecdotes);
+export const useAnecdoteFilter = () => storeAnecdotes(state => state.filter);
 export const useAnecdoteControls = () => storeAnecdotes(state => state.actions);
