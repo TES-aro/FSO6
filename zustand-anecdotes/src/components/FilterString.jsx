@@ -1,4 +1,4 @@
-import {useAnecdoteFilter} from '../store.js';
+import { useAnecdoteFilter } from '../store.js';
 
 const FilterString = () => {
 	const filterString = useAnecdoteFilter();
@@ -6,7 +6,7 @@ const FilterString = () => {
 		<div>
 			{filterString}
 		</div>
-	)
-}
+	);
+};
 
 export default FilterString;

@@ -1,29 +1,69 @@
 import { create } from 'zustand';
+import { getAll, createAnecdote, saveVote, saveDelete } from './services/anecdotes.js';
 
 const storeAnecdotes = create(set => ({
-	filter: "",
+	filter: '',
 	anecdotes: [],
 	actions: {
+		getAll: async () => {
+			try{
+				const fetchedData = await getAll();
+				set(
+					state => ({
+						anecdotes: fetchedData
+					})
+				);
+			} catch (e) {
+				console.error(e);
+			}
+		},
 		updateFilter: filterStr => set(
-			state => ({filter: filterStr})
+			state => ({ filter: filterStr })
 		),
-		upvote: id => set(
-			state => ({
-				anecdotes: (state.anecdotes.map(a => a.id === id
-					? { ...a, votes: a.votes + 1 }
-					: a
-				)).toSorted((a,b) => a.votes < b.votes)
-			})
-		),
-		add: anecdote => set(
-			state => ({
-				anecdotes: state.anecdotes.concat({
-					content: anecdote,
-					votes: 0,
-					id: genID()
-				})
-			})
-		)
+		upvote: async anecdote => {
+			try{
+				anecdote.votes = anecdote.votes + 1;
+				await saveVote(anecdote);
+				set(
+					state => ({
+						anecdotes: (state.anecdotes.map(a => a.id === anecdote.id
+							? anecdote
+							: a
+						)).toSorted((a,b) => a.votes < b.votes)
+					})
+				);
+			} catch (e) {
+				console.error(e);
+			}
+		},
+		add: async content => {
+			try {
+				const newAnecdote = await createAnecdote(content);
+				set(
+					state => ({
+						anecdotes: state.anecdotes.concat({
+							content: content,
+							votes: 0,
+							id: newAnecdote.id
+						})
+					})
+				);
+			} catch (e) {
+				console.error(e);
+			}
+		},
+		deleteAnecdote: async id => {
+			try{
+				await saveDelete(id);
+				set(
+					state => ({
+						anecdotes: state.anecdotes.filter( a => a.id !== id)
+					})
+				);
+			} catch(e) {
+				console.error(e);
+			}
+		}
 	}
 }));
 
