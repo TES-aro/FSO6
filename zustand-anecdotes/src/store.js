@@ -1,30 +1,14 @@
 import { create } from 'zustand';
-import { getAll, createAnecdote, saveVote, saveDelete } from './services/anecdotes.js';
+import { devtools } from 'zustand/middleware';
+import anecdoteService from './services/anecdotes.js';
 
-export const storeNotification = create(set => ({
-	notif: '',
-	actions: {
-		setNotif: message => {
-			console.log(`got a message ${message}`)
-			set(
-				state => ({
-					notif: message
-				})
-			)
-			setTimeout(() => {
-				set(state => ({notif:''}))
-			}, 5000)
-		}
-	}
-}))
-
-const storeAnecdotes = create(set => ({
+export const useAnecdoteStore = create(devtools(set => ({
 	filter: '',
-	anecdotes: [],
+	anecdotes: [{content: "lorem ipsum", votes:0, id:124}],
 	actions: {
-		getAll: async () => {
+		initialize: async () => {
 			try{
-				const fetchedData = await getAll();
+				const fetchedData = await anecdoteService.getAll();
 				
 				set(
 					state => ({
@@ -41,7 +25,7 @@ const storeAnecdotes = create(set => ({
 		upvote: async anecdote => {
 			try{
 				anecdote.votes = anecdote.votes + 1;
-				await saveVote(anecdote);
+				await anecdoteService.saveVote(anecdote);
 				set(
 					state => ({
 						anecdotes: (state.anecdotes.map(a => a.id === anecdote.id
@@ -56,7 +40,7 @@ const storeAnecdotes = create(set => ({
 		},
 		add: async content => {
 			try {
-				const newAnecdote = await createAnecdote(content);
+				const newAnecdote = await anecdoteService.createAnecdote(content);
 				set(
 					state => ({
 						anecdotes: state.anecdotes.concat({
@@ -72,7 +56,7 @@ const storeAnecdotes = create(set => ({
 		},
 		deleteAnecdote: async id => {
 			try{
-				await saveDelete(id);
+				await anecdoteService.saveDelete(id);
 				set(
 					state => ({
 						anecdotes: state.anecdotes.filter( a => a.id !== id)
@@ -83,15 +67,19 @@ const storeAnecdotes = create(set => ({
 			}
 		}
 	}
-}));
+})));
 
-// yeah, it's lazy but not what we're training here
-const genID = () => {
-	return Math.floor(Math.random()*1000000);
-};
+export const getAnecdotes = () => {
+	const anecdotes = useAnecdoteStore((state) => state.anecdotes);
+	const filter = useAnecdoteStore((state) => state.filter);
+	const sorted = anecdotes.toSorted((a,b) => a.votes > b.votes)
+	if (filter === ''){
+		return sorted
+	}
+	return sorted.filter( a => a.content.includes(filter))
+}
 
-export const useNotification = () => storeNotification(state => state.notif);
-export const setNotification = () => storeNotification(state => state.actions);
-export const useAnecdotes = () => storeAnecdotes(state => state.anecdotes);
-export const useAnecdoteFilter = () => storeAnecdotes(state => state.filter);
-export const useAnecdoteControls = () => storeAnecdotes(state => state.actions);
+export const useAnecdoteActions = () => useAnecdoteStore((state) => state.actions);
+export const useAnecdotes = () => useAnecdoteStore(state => state.anecdotes);
+export const useAnecdoteFilter = () => useAnecdoteStore(state => state.filter);
+export const useAnecdoteControls = () => useAnecdoteStore(state => state.actions);

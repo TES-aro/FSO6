@@ -1,5 +1,6 @@
 
-import { setNotification, useAnecdoteControls } from '../store';
+import { useAnecdoteControls } from '../store';
+import { setNotification } from '../notification_store';
 
 const AnecdoteForm = () => {
 

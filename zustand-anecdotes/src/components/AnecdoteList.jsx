@@ -5,10 +5,10 @@ import { useEffect } from 'react';
 const AnecdoteList = () => {
 	const anecdotes = useAnecdotes();
 	const filter = useAnecdoteFilter();
-	const { getAll } = useAnecdoteControls();
+	const { initialize } = useAnecdoteControls();
 	useEffect(() => {
-		getAll();
-	},[getAll]);
+		initialize();
+	},[initialize]);
 	return(
 		<div>
 			<ul>

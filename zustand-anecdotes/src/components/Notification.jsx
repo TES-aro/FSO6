@@ -1,5 +1,4 @@
-import {storeNotification} from '../store.js';
-import { useNotification } from '../store.js';
+import { useNotification } from '../notification_store.js';
 import { useEffect } from 'react';
 
 const Notification = () => {
