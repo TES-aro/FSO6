@@ -1,6 +1,23 @@
 import { create } from 'zustand';
 import { getAll, createAnecdote, saveVote, saveDelete } from './services/anecdotes.js';
 
+export const storeNotification = create(set => ({
+	notif: '',
+	actions: {
+		setNotif: message => {
+			console.log(`got a message ${message}`)
+			set(
+				state => ({
+					notif: message
+				})
+			)
+			setTimeout(() => {
+				set(state => ({notif:''}))
+			}, 5000)
+		}
+	}
+}))
+
 const storeAnecdotes = create(set => ({
 	filter: '',
 	anecdotes: [],
@@ -8,9 +25,10 @@ const storeAnecdotes = create(set => ({
 		getAll: async () => {
 			try{
 				const fetchedData = await getAll();
+				
 				set(
 					state => ({
-						anecdotes: fetchedData
+						anecdotes: fetchedData.toSorted((a,b) => a.votes < b.votes)
 					})
 				);
 			} catch (e) {
@@ -71,6 +89,9 @@ const storeAnecdotes = create(set => ({
 const genID = () => {
 	return Math.floor(Math.random()*1000000);
 };
+
+export const useNotification = () => storeNotification(state => state.notif);
+export const setNotification = () => storeNotification(state => state.actions);
 export const useAnecdotes = () => storeAnecdotes(state => state.anecdotes);
 export const useAnecdoteFilter = () => storeAnecdotes(state => state.filter);
 export const useAnecdoteControls = () => storeAnecdotes(state => state.actions);

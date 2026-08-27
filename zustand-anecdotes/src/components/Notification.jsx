@@ -1,3 +1,7 @@
+import {storeNotification} from '../store.js';
+import { useNotification } from '../store.js';
+import { useEffect } from 'react';
+
 const Notification = () => {
 	const style = {
 		border: 'solid',
@@ -5,8 +9,15 @@ const Notification = () => {
 		borderWidth: 1,
 		marginBottom: 10
 	};
+	//const notif = storeNotification(state => state.notif)
+	const notif = useNotification();
+	console.log(notif)	
 
-	return <div style={style}>render here notification...</div>;
+	if (notif == ''){
+		return null
+	}
+
+	return <div style={style}> {notif} </div>;
 };
 
 export default Notification;

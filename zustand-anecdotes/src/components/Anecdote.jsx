@@ -1,16 +1,21 @@
 import { useAnecdoteControls } from '../store.js';
+import { setNotification } from '../store.js';
 
 const Anecdote = ({ anecdote }) => {
 	const { upvote, deleteAnecdote } = useAnecdoteControls();
+	const {setNotif} = setNotification();
 	//console.log(anecdote);
 	//console.log(`hi! in signual anecdote ${anecdote.content}`);
 
 	const likeHandler = () => {
 		upvote(anecdote);
+		setNotif('you liked an anecdote')
+		
 	};
 
 	const delHandler = () => {
 		deleteAnecdote(anecdote.id);
+		setNotif(`you deleted anecdote ${anecdote.id}`)
 	};
 
 	if (anecdote.votes === 0){
