@@ -60,7 +60,7 @@ describe('now with array', () => {
     console.log(result.current)
     expect(result.current).toHaveLength(1)
   })
-  it.only('upvoting', async () => {
+  it('upvoting', async () => {
     anecdoteService.saveVote.mockResolvedValue({...anecdotes[0], votes: 1});
     
     const { result } = renderHook(() => useAnecdoteStore());
