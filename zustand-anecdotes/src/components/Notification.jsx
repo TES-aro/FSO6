@@ -10,10 +10,10 @@ const Notification = () => {
 	};
 	//const notif = storeNotification(state => state.notif)
 	const notif = useNotification();
-	console.log(notif)	
+	console.log(notif);
 
 	if (notif == ''){
-		return null
+		return null;
 	}
 
 	return <div style={style}> {notif} </div>;

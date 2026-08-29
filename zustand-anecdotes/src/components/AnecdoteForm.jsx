@@ -5,14 +5,14 @@ import { setNotification } from '../notification_store';
 const AnecdoteForm = () => {
 
 	const { add } = useAnecdoteControls();
-	const {setNotif} = setNotification();
+	const { setNotif } = setNotification();
 	const handleSumit = (e) => {
 	  e.preventDefault();
 	  const form = e.target;
 		const formData = new FormData(form);
 		const anecdote = formData.get('anecdote');
 		add(anecdote);
-		setNotif(`you created a new notification!`)
+		setNotif('you created a new notification!');
 		e.target.reset();
 	};
 

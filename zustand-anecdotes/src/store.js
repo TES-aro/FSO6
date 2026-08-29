@@ -4,12 +4,12 @@ import anecdoteService from './services/anecdotes.js';
 
 export const useAnecdoteStore = create(devtools(set => ({
 	filter: '',
-	anecdotes: [{content: "lorem ipsum", votes:0, id:124}],
+	anecdotes: [{ content: 'lorem ipsum', votes:0, id:124 }],
 	actions: {
 		initialize: async () => {
 			try{
 				const fetchedData = await anecdoteService.getAll();
-				
+
 				set(
 					state => ({
 						anecdotes: fetchedData.toSorted((a,b) => a.votes < b.votes)
@@ -72,12 +72,12 @@ export const useAnecdoteStore = create(devtools(set => ({
 export const getAnecdotes = () => {
 	const anecdotes = useAnecdoteStore((state) => state.anecdotes);
 	const filter = useAnecdoteStore((state) => state.filter);
-	const sorted = anecdotes.toSorted((a,b) => a.votes > b.votes)
+	const sorted = anecdotes.toSorted((a,b) => a.votes > b.votes);
 	if (filter === ''){
-		return sorted
+		return sorted;
 	}
-	return sorted.filter( a => a.content.includes(filter))
-}
+	return sorted.filter( a => a.content.includes(filter));
+};
 
 export const useAnecdoteActions = () => useAnecdoteStore((state) => state.actions);
 export const useAnecdotes = () => useAnecdoteStore(state => state.anecdotes);
