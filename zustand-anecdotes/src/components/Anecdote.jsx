@@ -10,7 +10,6 @@ const Anecdote = ({ anecdote }) => {
 	const likeHandler = () => {
 		upvote(anecdote);
 		setNotif('you liked an anecdote');
-
 	};
 
 	const delHandler = () => {
